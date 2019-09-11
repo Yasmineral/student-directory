@@ -24,13 +24,13 @@ end
  end	
 
 def print(students)
-  students.each_with_index do |student, index|
-    index_plus_one = index + 1
-    name = student[:name]
-    if name.start_with?('S') && name.length < 12
-      puts "#{index_plus_one}. #{student[:name]} (#{student[:cohort]} cohort)"
-    end 
-  end 
+  counter = 1
+  while counter <= students.length do
+  students.each do |student|
+    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    counter += 1
+  end  
+end
 end 
 
 def print_footer(names)
