@@ -37,7 +37,7 @@ end
 def name_starts_with(names)
   puts "Which letter would you like to search?"
   letter = gets.chomp.downcase
-  array.each do |person|
+  names.each do |person|
     name = (person[:name]).downcase
     if name.start_with?(letter)
       puts name.capitalize
@@ -52,5 +52,6 @@ students = input_students
 print_header
 print(students)
 print_footer(students)
+name_starts_with(students)
 
 
