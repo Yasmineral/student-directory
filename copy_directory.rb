@@ -26,9 +26,12 @@ end
 def print(students)
   students.each_with_index do |student, index|
     index_plus_one = index + 1
-    puts "#{index_plus_one}. #{student[:name]} (#{student[:cohort]} cohort)"
-  end	
-end	
+    name = student[:name]
+    if name.start_with?('S') && name.length < 12
+      puts "#{index_plus_one}. #{student[:name]} (#{student[:cohort]} cohort)"
+    end 
+  end 
+end 
 
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
@@ -46,12 +49,10 @@ def name_starts_with(names)
 end 
 
 
-
-
 students = input_students
 print_header
 print(students)
 print_footer(students)
-name_starts_with(students)
+
 
 
