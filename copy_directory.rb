@@ -1,40 +1,49 @@
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
-  # create an empty array
   students = []
-  # get the first name
+  months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
   name = gets.chomp
   # while the name is not empty, repeat this code
   while !name.empty? do
-    # add the student hash to the array
-    students << {name: name, cohort: :november}
-    puts "Now we have #{students.count} students"
+    puts "Cohort?"
+    cohort = gets.chomp.downcase
+    while !months.include?(cohort)
+      puts "Month not valid. Re-enter"
+      cohort = gets.chomp.downcase
+    end
+   students << {name: name, cohort: (cohort.to_sym)}
+    if students.count == 1 
+      puts "Now we have #{students.count} student"
+    else
+      puts "Now we have #{students.count} students"
+    end  
     # get another name from the user
     name = gets.chomp
   end   
   # return the array of students
-  students
-end	
+ students
+end 
 
 
  def print_header
-   puts "The students of Villains Academy"
-   puts "-------------"
+   puts "The students of Villains Academy".center(50)
+   puts "-------------".center(50)
  end	
 
 def print(students)
   counter = 1
   while counter <= students.length do
   students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    puts "#{student[:name]} (#{student[:cohort]} cohort)".center(50)
     counter += 1
   end  
 end
 end 
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  puts "\n"
+  puts "Overall, we have #{names.count} great students".center(50)
 end
 
 def name_starts_with(names)
