@@ -1,7 +1,8 @@
+@students = [] # empty array accessible to all methods
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
-  students = []
   months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
   name = gets.chomp
   # while the name is not empty, repeat this code
@@ -12,40 +13,67 @@ def input_students
       puts "Month not valid. Re-enter"
       cohort = gets.chomp.downcase
     end
-   students << {name: name, cohort: (cohort.to_sym)}
-    if students.count == 1 
-      puts "Now we have #{students.count} student"
+   @students << {name: name, cohort: (cohort.to_sym)}
+    if @students.count == 1 
+      puts "Now we have #{@students.count} student"
     else
-      puts "Now we have #{students.count} students"
+      puts "Now we have #{@students.count} students"
     end  
     # get another name from the user
     name = gets.chomp
   end   
-  # return the array of students
- students
+end
+
+def interactive_menu
+  loop do
+    print_menu
+    process(gets.chomp)
+  end
 end 
 
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end  
+
+def show_students
+  print_header
+  print_students_list
+  print_footer
+end  
+
+def process(selection)
+  case selection
+    when "1"
+      input_students
+    when "2"
+      show_students
+    when "9"
+      exit
+    else
+      puts "I don't understand what you mean, try again"
+  end
+end
 
  def print_header
    puts "The students of Villains Academy".center(50)
    puts "-------------".center(50)
  end	
 
-def print(students)
-  counter = 1
-  while counter <= students.length do
-  students.each do |student|
+def print_students_list
+  @students.each do |student|
     puts "#{student[:name]} (#{student[:cohort]} cohort)".center(50)
-    counter += 1
   end  
-end
 end 
 
-def print_footer(names)
+def print_footer
   puts "\n"
-  puts "Overall, we have #{names.count} great students".center(50)
+  puts "Overall, we have #{@students.count} great students".center(50)
 end
 
+
+# my extra methods --
 def name_starts_with(names)
   puts "Which letter would you like to search?"
   letter = gets.chomp.downcase
@@ -57,21 +85,20 @@ def name_starts_with(names)
   end
 end 
 
-def print_by_cohort(students)
+def print_by_cohort
   puts "Which cohort would you like to search for?"
   input = gets.chomp
   puts "Here are all of #{input}'s' students:"
   input = input.downcase.to_sym
-  students.map do |student| if student[:cohort] == input
+  @students.map do |student| if student[:cohort] == input
     puts "#{student[:name]}" end
   end
 end 
- 
 
-students = input_students
-print_header
-print_by_cohort(students)
-print_footer(students)
+# --
+ 
+interactive_menu
+
 
 
 
