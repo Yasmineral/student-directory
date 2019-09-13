@@ -57,10 +57,20 @@ def name_starts_with(names)
   end
 end 
 
+def print_by_cohort(students)
+  puts "Which cohort would you like to search for?"
+  input = gets.chomp
+  puts "Here are all of #{input}'s' students:"
+  input = input.downcase.to_sym
+  students.map do |student| if student[:cohort] == input
+    puts "#{student[:name]}" end
+  end
+end 
+ 
 
 students = input_students
 print_header
-print(students)
+print_by_cohort(students)
 print_footer(students)
 
 
