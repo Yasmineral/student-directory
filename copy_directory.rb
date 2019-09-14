@@ -3,7 +3,7 @@
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
+  puts "3. Save the list to file"
   puts "4. Load the list from students.csv"
   puts "9. Exit"
 end  
@@ -22,10 +22,12 @@ def process(selection)
     when "2"
       show_students
     when "3"
-      save_students  
+      try_save_students 
     when "4"
       load_students
     when "9"
+      puts "\n"
+      puts "Goodbye!"
       exit
     else
       puts "I don't understand what you mean, try again"
@@ -40,12 +42,12 @@ def input_students
   # while the name is not empty, repeat this code
   while !name.empty? do
     puts "Cohort?"
-    cohort = gets.chomp.downcase
+    cohort = STDIN.gets.chomp.downcase
     while !months.include?(cohort)
       puts "Month not valid. Re-enter"
       cohort = STDIN.gets.chomp.downcase
     end
-   @students << {name: name, cohort: (cohort.to_sym)}
+    add_student(name, cohort)
     if @students.count == 1 
       puts "Now we have #{@students.count} student"
     else
@@ -54,6 +56,10 @@ def input_students
     # get another name from the user
     name = STDIN.gets.chomp
   end   
+end
+
+def add_student(name, cohort)
+  @students << {name: name, cohort: (cohort.to_sym)}
 end
 
 def show_students
@@ -78,8 +84,8 @@ def print_footer
   puts "Overall, we have #{@students.count} great students".center(50)
 end
 
-def save_students
-  file = File.open("students.csv", "w")
+def save_students(filename)
+  file = File.open(filename, "w")
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
@@ -87,12 +93,13 @@ def save_students
   end
   file.close 
 end  
+ 
 
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym}
+    add_student(name, cohort)
   end
   file.close    
 end  
@@ -100,16 +107,31 @@ end
 def try_load_students
   # first argument from command line
   filename = ARGV.first
-  # get out of the method if it doesnn't exist 
-  return if filename.nil?
-  if File.exists?(filename)
+  # get out of the method if it doesn't exist 
+  if filename.nil?
+    load_students("students.csv")
+  elsif File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
   else 
     puts "Sorry, #{filename} doesn't exist" 
     exit
   end     
-end	
+end 
+
+def try_save_students
+  puts "Which file should I save to?"
+  file = STDIN.gets.chomp 
+  if file.empty?
+    puts "Saving to default file: students.csv"
+    save_students("students.csv")
+  elsif File.exists?(file)
+    save_students(file)
+    puts "Students saved to: #{file}"
+  else
+    puts "Sorry, #{file} doesn't exist"
+  end     
+end
 
 
 # --- my extra methods --
@@ -136,7 +158,6 @@ end
 
 # --
  
-try_load_students
 interactive_menu
 
 
