@@ -156,6 +156,25 @@ def print_by_cohort
   end
 end 
 
+=begin
+
+Consider implementing the following code when using blocks to
+auto-close files. If an exception is raised within the block, the
+file won't auto close, causing potential resource leaks. Below code
+ensures the file is closed despite an exception.
+
+class File
+  def self.open(name, mode, &block)
+    file = new(name, mode)
+    return file unless block_given?
+    yield(file)
+  ensure
+    file.close
+  end
+end
+
+=end
+
 # --
  
 interactive_menu
